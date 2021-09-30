@@ -61,7 +61,7 @@ public class EmpleadoDAO {
 			
 			ResultSet resultado = ps.executeQuery();
 			
-			conexion.close();
+			
 			
 			while(resultado.next()){
 				EmpleadoVO empleado = new EmpleadoVO();
@@ -73,11 +73,91 @@ public class EmpleadoDAO {
 				listaEmpleados.add(empleado);
 			}
 			
+			conexion.close();
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 		
 		return listaEmpleados;
+	}
+	
+	public static int eliminar(EmpleadoVO emp){
+		
+		int estado = 0;
+		
+		try {
+			Connection conexion = EmpleadoDAO.obtenerConexion();
+			PreparedStatement ps = conexion.prepareStatement("DELETE FROM empleados WHERE id=?");
+			ps.setInt(1,emp.getId());
+			
+			estado = ps.executeUpdate();
+			
+			conexion.close();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return estado;
+	}
+	
+	public static EmpleadoVO obtenerEmpleadosId(int id){
+		EmpleadoVO empleado = new EmpleadoVO();
+		
+		try {
+			Connection conexion = EmpleadoDAO.obtenerConexion();
+			PreparedStatement ps = conexion.prepareStatement("SELECT FROM empleados WHERE id=?");
+			ps.setInt(1, id);
+			ResultSet resultado = ps.executeQuery();
+			
+			
+			
+			while(resultado.next()){
+				empleado.setId(resultado.getInt(1));
+				empleado.setNombre(resultado.getString(2));
+				empleado.setPassword(resultado.getString(3));
+				empleado.setEmail(resultado.getString(4));
+				empleado.setZona(resultado.getString(5));
+			}
+			
+			conexion.close();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return empleado;
+	}
+	
+	public static EmpleadoVO modificarEmpleado(EmpleadoVO emp){
+		EmpleadoVO empleado = new EmpleadoVO();
+		
+		try {
+			Connection conexion = EmpleadoDAO.obtenerConexion();
+			PreparedStatement ps = conexion.prepareStatement("UPDATE FROM SET nombre=? password=? email=? zona=?");
+			ps.setString(1,emp.getNombre());
+			ps.setString(2,emp.getPassword());
+			ps.setString(3,emp.getEmail());
+			ps.setString(4,emp.getZona());
+			ResultSet resultado = ps.executeQuery();
+			
+			
+			
+			while(resultado.next()){
+				empleado.setId(resultado.getInt(1));
+				empleado.setNombre(resultado.getString(2));
+				empleado.setPassword(resultado.getString(3));
+				empleado.setEmail(resultado.getString(4));
+				empleado.setZona(resultado.getString(5));
+			}
+			
+			conexion.close();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		return empleado;
 	}
 
 }
